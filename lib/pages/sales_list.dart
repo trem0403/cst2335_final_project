@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:final_project/database/database.dart';
 
 class SalesListPage extends StatefulWidget {
-  const SalesListPage({super.key});
+  final AppDatabase database;
+
+  const SalesListPage({super.key, required this.database});
 
   @override
   State<SalesListPage> createState() => SalesListPageState();

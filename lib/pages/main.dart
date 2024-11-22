@@ -3,30 +3,40 @@ import 'package:final_project/pages/car_list.dart';
 import 'package:final_project/pages/car_dealership_list.dart';
 import 'package:final_project/pages/customer_list.dart';
 import 'package:final_project/pages/sales_list.dart';
+import 'package:final_project/database/database.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+  runApp(MyApp(database: database));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final AppDatabase database;
+
+  const MyApp({super.key, required this.database});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Home Page',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(
+        title: 'Home Page',
+        database: database,
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  final AppDatabase database;
+
+  const MyHomePage({super.key, required this.database, required this.title});
 
   final String title;
 
@@ -35,6 +45,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +62,9 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const CustomerListPage()),
+                  MaterialPageRoute(
+                    builder: (context) => CustomerListPage(database: widget.database),
+                  ),
                 );
               },
               child: const Text('Customer List'),
@@ -59,7 +73,9 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const CarListPage()),
+                  MaterialPageRoute(
+                    builder: (context) => CarListPage(database: widget.database),
+                  ),
                 );
               },
               child: const Text('Car List'),
@@ -68,7 +84,9 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const CarDealershipListPage()),
+                  MaterialPageRoute(
+                    builder: (context) => CarDealershipListPage(database: widget.database),
+                  ),
                 );
               },
               child: const Text('Car Dealership List'),
@@ -77,7 +95,9 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const SalesListPage()),
+                  MaterialPageRoute(
+                    builder: (context) => SalesListPage(database: widget.database),
+                  ),
                 );
               },
               child: const Text('Sales List'),

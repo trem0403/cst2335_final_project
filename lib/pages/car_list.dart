@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:final_project/database/database.dart';
 
 class CarListPage extends StatefulWidget {
-  const CarListPage({super.key});
+  final AppDatabase database;
+
+  const CarListPage({super.key, required this.database});
 
   @override
   State<CarListPage> createState() => CarListPageState();
