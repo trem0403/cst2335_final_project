@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:final_project/pages/car_list.dart';
+import 'package:final_project/pages/car_dealership_list.dart';
+import 'package:final_project/pages/customer_list.dart';
+import 'package:final_project/pages/sales_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,7 +35,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +46,42 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CustomerListPage()),
+                );
+              },
+              child: const Text('Customer List'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CarListPage()),
+                );
+              },
+              child: const Text('Car List'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CarDealershipListPage()),
+                );
+              },
+              child: const Text('Car Dealership List'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SalesListPage()),
+                );
+              },
+              child: const Text('Sales List'),
+            ),
           ],
         ),
       ),

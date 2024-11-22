@@ -1,5 +1,5 @@
 import 'package:floor/floor.dart';
-import 'package:final_project/entity/Customer.dart';
+import 'package:final_project/entity/customer.dart';
 
 @dao
 abstract class CustomerDao {
