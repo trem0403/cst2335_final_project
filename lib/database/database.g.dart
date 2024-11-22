@@ -378,8 +378,8 @@ class _$CustomerDao extends CustomerDao {
             row['id'] as int,
             row['firstName'] as String,
             row['lastName'] as String,
-            row['address'] as String,
-            row['birthday'] as String));
+            row['birthday'] as String,
+            row['address'] as String));
   }
 
   @override
