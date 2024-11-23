@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:final_project/database/database.dart';
 import 'package:final_project/dao/customer_dao.dart';
 import 'package:final_project/entity/customer.dart';
+import 'package:final_project/pages/addCustomer.dart';
 
 class CustomerListPage extends StatefulWidget {
   final AppDatabase database;
@@ -16,6 +17,7 @@ class CustomerListPageState extends State<CustomerListPage> {
   late CustomerDao dao;
   Customer? selectedCustomer;
   List<Customer> customers = [];
+  int currentIndex = 0; // Index for bottom navigation
 
   @override
   void initState() {
@@ -31,10 +33,39 @@ class CustomerListPageState extends State<CustomerListPage> {
     });
   }
 
+  void handleNavigation(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+
+    switch (index) {
+      case 0: // Insert
+        insertCustomer();
+        break;
+      case 1: // Update
+        updateCustomer();
+        break;
+      case 2: // Delete
+        showDeleteDialog();
+        break;
+    }
+  }
+
   void insertCustomer() async {
-    // Example logic to add a customer
-    loadCustomers();
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Customer added successfully")));
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddCustomerPage(
+          database: widget.database,
+          customers: customers,
+        ),
+      ),
+    );
+
+    // Reload the customer list if a new customer was added
+    if (result == true) {
+      loadCustomers();
+    }
   }
 
   void updateCustomer() async {
@@ -59,6 +90,29 @@ class CustomerListPageState extends State<CustomerListPage> {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Customer deleted successfully")));
   }
 
+  void showDeleteDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Delete Customer ${selectedCustomer?.id.toString()}" ),
+        content: const Text("Are you sure you want to delete this customer?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("No"),
+          ),
+          TextButton(
+            onPressed: () {
+              deleteCustomer();
+              Navigator.of(context).pop();
+            },
+            child: const Text("Yes"),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,35 +122,23 @@ class CustomerListPageState extends State<CustomerListPage> {
       body: Center(
         child: reactiveLayout(),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            FloatingActionButton(
-              heroTag: "btnInsert",
-              onPressed: insertCustomer,
-              backgroundColor: Colors.green,
-              child: const Icon(Icons.add),
-              tooltip: "Insert Customer",
-            ),
-            FloatingActionButton(
-              heroTag: "btnUpdate",
-              onPressed: updateCustomer,
-              backgroundColor: Colors.blue,
-              child: const Icon(Icons.edit),
-              tooltip: "Update Customer",
-            ),
-            FloatingActionButton(
-              heroTag: "btnDelete",
-              onPressed: deleteCustomer,
-              backgroundColor: Colors.red,
-              child: const Icon(Icons.delete),
-              tooltip: "Delete Customer",
-            ),
-          ],
-        ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: handleNavigation,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add, color: Colors.green),
+            label: 'Create',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.edit, color: Colors.blue),
+            label: 'Edit',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.delete, color: Colors.red),
+            label: 'Delete',
+          ),
+        ],
       ),
     );
   }
@@ -126,24 +168,99 @@ class CustomerListPageState extends State<CustomerListPage> {
   }
 
   Widget detailsPage() {
-    TextStyle st = const TextStyle(fontSize: 30.0);
-
-    return Column(
-      children: [
-        if (selectedCustomer == null)
-          Text("Please select a Customer from the list", style: st)
-        else
-          Text("You selected Customer : ${selectedCustomer!.id}", style: st),
-        ElevatedButton(
-          child: const Text("Ok"),
-          onPressed: () {
-            // Update GUI
-            setState(() {
-              selectedCustomer = null; // Clear the selection
-            });
-          },
+    if (selectedCustomer == null) {
+      return const Center(
+        child: Text(
+          "Please select a Customer from the list",
+          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
         ),
-      ],
+      );
+    }
+
+    var size = MediaQuery.of(context).size;
+    var height = size.height;
+    var width = size.width;
+    bool isLandscape = false;
+
+    if ((width > height) && (width > 720)) {
+      isLandscape = true;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Customer Details",
+                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+              ),
+              const Divider(thickness: 1),
+              const SizedBox(height: 10),
+              Expanded(
+                child: GridView.count(
+                  crossAxisCount: isLandscape ? 2 : 1, // 2 columns in landscape, 1 in portrait
+                  crossAxisSpacing: 16.0,
+                  mainAxisSpacing: 6.0,
+                  childAspectRatio: isLandscape ? 3.5 : 5, // Adjusted for better fit in landscape
+                  children: [
+                    buildDetailCard("ID", selectedCustomer!.id.toString()),
+                    buildDetailCard("First Name", selectedCustomer!.firstName),
+                    buildDetailCard("Last Name", selectedCustomer!.lastName),
+                    buildDetailCard("Birthday", selectedCustomer!.birthday),
+                    buildDetailCard("Address", selectedCustomer!.address),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Align(
+
+                alignment: Alignment.center,
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      selectedCustomer = null; // Clear the selection
+                    });
+                  },
+                  child:
+                  const Text("Back to List"),
+                ),
+              ),
+            ],
+
+          );
+        },
+      ),
+    );
+  }
+
+  Widget buildDetailCard(String title, String value) {
+    return Container(
+      padding: const EdgeInsets.all(12.0), // Reduced padding for a compact layout
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16.0,
+            ),
+          ),
+          const SizedBox(height: 4.0),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 14.0),
+          ),
+        ],
+      ),
     );
   }
 
