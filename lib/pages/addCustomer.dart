@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:final_project/database/database.dart';
 import 'package:final_project/dao/customer_dao.dart';
 import 'package:final_project/entity/customer.dart';
+import 'package:final_project/repository/customer_repository.dart';
+
 
 class AddCustomerPage extends StatefulWidget {
   final AppDatabase database;
@@ -18,18 +20,80 @@ class AddCustomerPageState extends State<AddCustomerPage> {
 
 
   // Text controllers for form fields
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController birthdayController = TextEditingController();
+  late TextEditingController firstNameController;
+  late TextEditingController lastNameController;
+  late TextEditingController addressController;
+  late TextEditingController birthdayController;
 
   @override
   void initState() {
     super.initState();
     dao = widget.database.customerDao;
+
+    firstNameController = TextEditingController();
+    lastNameController = TextEditingController();
+    addressController = TextEditingController();
+    birthdayController = TextEditingController();
+
+    // Check if there are existing customers and show the dialog
+    if (widget.customers.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showCopyDataDialog();
+      });
+    }
+  }
+
+
+  Future<void> showCopyDataDialog() async {
+    final shouldCopyData = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Copy Last Customer?"),
+          content: const Text(
+            "Do you want to copy details from the last customer entry?",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text("No"),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text("Yes"),
+            ),
+          ],
+        );
+      },
+    );
+    if (shouldCopyData == true) {
+      loadDataFromLastCustomer();
+    }
+  }
+
+  void loadDataFromLastCustomer() async {
+    setState(() {
+      firstNameController.text = CustomerRepository.firstName;
+      lastNameController.text = CustomerRepository.lastName;
+      addressController.text = CustomerRepository.address;
+      birthdayController.text = CustomerRepository.birthday;
+    });
+  }
+
+  void saveDataForNextCustomer() async {
+    CustomerRepository.firstName = firstNameController.text;
+    CustomerRepository.lastName = lastNameController.text;
+    CustomerRepository.address = addressController.text;
+    CustomerRepository.birthday = birthdayController.text;
+
+    CustomerRepository.saveData();
   }
 
   void addCustomer() async {
+
+    //Save customer data for next customer entry
+    saveDataForNextCustomer();
+
     // Validate that all fields are filled
     if (firstNameController.text.isEmpty ||
         lastNameController.text.isEmpty ||
