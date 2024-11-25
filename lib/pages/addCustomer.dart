@@ -8,8 +8,9 @@ import 'package:final_project/repository/customer_repository.dart';
 class AddCustomerPage extends StatefulWidget {
   final AppDatabase database;
   final List<Customer> customers;
+  final Customer? customerToEdit; // Nullable customer for editing
 
-  const AddCustomerPage({super.key, required this.database, required this.customers});
+  const AddCustomerPage({super.key, required this.database, required this.customers, this.customerToEdit,});
 
   @override
   State<AddCustomerPage> createState() => AddCustomerPageState();
@@ -35,8 +36,15 @@ class AddCustomerPageState extends State<AddCustomerPage> {
     addressController = TextEditingController();
     birthdayController = TextEditingController();
 
-    // Check if there are existing customers and show the dialog
-    if (widget.customers.isNotEmpty) {
+    // Prepopulate fields if editing
+    if (widget.customerToEdit != null) {
+      firstNameController.text = widget.customerToEdit!.firstName;
+      lastNameController.text = widget.customerToEdit!.lastName;
+      addressController.text = widget.customerToEdit!.address;
+      birthdayController.text = widget.customerToEdit!.birthday;
+
+      // Check if there are existing customers and show the dialog
+    } else if (widget.customers.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         showCopyDataDialog();
       });
@@ -77,6 +85,10 @@ class AddCustomerPageState extends State<AddCustomerPage> {
       lastNameController.text = CustomerRepository.lastName;
       addressController.text = CustomerRepository.address;
       birthdayController.text = CustomerRepository.birthday;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Customer Data Loaded!"))
+      );
     });
   }
 
@@ -90,10 +102,6 @@ class AddCustomerPageState extends State<AddCustomerPage> {
   }
 
   void addCustomer() async {
-
-    //Save customer data for next customer entry
-    saveDataForNextCustomer();
-
     // Validate that all fields are filled
     if (firstNameController.text.isEmpty ||
         lastNameController.text.isEmpty ||
@@ -119,6 +127,9 @@ class AddCustomerPageState extends State<AddCustomerPage> {
     // Insert the customer into the database
     await dao.insertCustomer(newCustomer);
 
+    //Save customer data for next customer entry
+    saveDataForNextCustomer();
+
     // Go back to the previous page
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Customer added successfully!')),
@@ -129,6 +140,16 @@ class AddCustomerPageState extends State<AddCustomerPage> {
     addressController.clear();
     birthdayController.clear();
   }
+
+  void updateCustomer() async {
+
+    // Saves updates customer information into a new record
+    addCustomer();
+
+    // Delete customer with outdated information
+    await dao.deleteCustomerById(widget.customerToEdit!.id);
+  }
+
 
   @override
   void dispose() {
@@ -142,9 +163,10 @@ class AddCustomerPageState extends State<AddCustomerPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isEditing = widget.customerToEdit != null;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Customer'),
+        title: Text(isEditing ? 'Edit Customer' : 'Add Customer'),
       ),
       body: Center(
         child: Card(
@@ -158,7 +180,7 @@ class AddCustomerPageState extends State<AddCustomerPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Customer Details',
+                      isEditing ? 'Edit Customer Details' : 'Customer Details',
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 20),
@@ -168,12 +190,6 @@ class AddCustomerPageState extends State<AddCustomerPage> {
                         labelText: 'First Name',
                         border: OutlineInputBorder(),
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter the first name';
-                        }
-                        return null;
-                      },
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
@@ -182,12 +198,6 @@ class AddCustomerPageState extends State<AddCustomerPage> {
                         labelText: 'Last Name',
                         border: OutlineInputBorder(),
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter the last name';
-                        }
-                        return null;
-                      },
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
@@ -196,12 +206,6 @@ class AddCustomerPageState extends State<AddCustomerPage> {
                         labelText: 'Address',
                         border: OutlineInputBorder(),
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter the address';
-                        }
-                        return null;
-                      },
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
@@ -210,21 +214,11 @@ class AddCustomerPageState extends State<AddCustomerPage> {
                         labelText: 'Birthday (YYYY-MM-DD)',
                         border: OutlineInputBorder(),
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter the birthday';
-                        }
-                        final regex = RegExp(r'^\d{4}-\d{2}-\d{2}$');
-                        if (!regex.hasMatch(value)) {
-                          return 'Enter a valid date in YYYY-MM-DD format';
-                        }
-                        return null;
-                      },
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: addCustomer,
-                      child: const Text('Add Customer'),
+                      onPressed: isEditing ? updateCustomer : addCustomer,
+                      child: Text(isEditing ? 'Save Changes' : 'Add Customer'),
                     ),
                   ],
                 ),

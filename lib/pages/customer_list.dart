@@ -54,11 +54,25 @@ class CustomerListPageState extends State<CustomerListPage> {
   void insertCustomer() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => AddCustomerPage(
-          database: widget.database,
-          customers: customers,
-        ),
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            AddCustomerPage(
+              database: widget.database,
+              customers: customers,
+            ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0); // Slide from right to left
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
       ),
     );
 
@@ -70,18 +84,52 @@ class CustomerListPageState extends State<CustomerListPage> {
 
   void updateCustomer() async {
     if (selectedCustomer == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No customer selected for update")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("No customer selected for update")),
+      );
       return;
     }
-    loadCustomers();
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Customer updated successfully")));
+
+    final result = await Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            AddCustomerPage(
+              database: widget.database,
+              customers: customers,
+              customerToEdit: selectedCustomer,
+            ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0); // Slide from right to left
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+      ),
+    );
+
+    // Reload the customer list if a customer was updated
+    if (result == true) {
+      loadCustomers();
+      setState(() {
+        selectedCustomer = null; // Clear the selection
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Customer updated successfully")),
+      );
+    }
   }
 
+
   void deleteCustomer() async {
-    if (selectedCustomer == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No customer selected for deletion")));
-      return;
-    }
+
     await dao.deleteCustomer(selectedCustomer!);
     setState(() {
       selectedCustomer = null; // Clear selection
@@ -91,6 +139,10 @@ class CustomerListPageState extends State<CustomerListPage> {
   }
 
   void showDeleteDialog() {
+    if (selectedCustomer == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No customer selected for deletion")));
+      return;
+    }
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
