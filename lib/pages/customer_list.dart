@@ -276,31 +276,50 @@ class CustomerListPageState extends State<CustomerListPage> {
           ),
           Flexible(
             child: customers.isEmpty
-                ? const Center(child: Text("There are no customers available"))
-                : ListView.builder(
+                ? const Center(
+              child: Text(
+                "There are no customers available",
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              ),
+            )
+                : ListView.separated(
               itemCount: customers.length,
+              separatorBuilder: (context, index) => const Divider(
+                thickness: 0.5,
+                color: Colors.grey,
+              ), // Add a line separator
               itemBuilder: (context, index) {
                 final customer = customers[index];
-                return GestureDetector(
+                return ListTile(
                   onTap: () {
                     setState(() {
                       selectedCustomer = customers[index];
                     });
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15.0, horizontal: 5.0),
+                  title: Text(
+                    "Customer: ${customer.firstName} ${customer.lastName}",
+                    style: const TextStyle(fontSize: 16.0),
+                  ),
+                  subtitle: Text(
+                    "ID: ${customer.id}",
+                    style: const TextStyle(fontSize: 14.0, color: Colors.grey),
+                  ),
+                  leading: CircleAvatar(
                     child: Text(
-                      "Customer: ${customer.id}",
-                      style: const TextStyle(fontSize: 15),
+                      customer.firstName[0], // Use the first letter of the first name
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 1.0, horizontal: 16.0),
                 );
               },
             ),
-          ),
+          )
         ],
       ),
     );
   }
+
 }

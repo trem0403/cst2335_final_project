@@ -41,10 +41,11 @@ class AddCustomerPageState extends State<AddCustomerPage> {
       return;
     }
 
-    final int newId = widget.customers.isEmpty ? 0 : widget.customers.length - 1;
+    final int newId = Customer.ID; // Use static ID
+    Customer.ID++; // Increment the static ID
     // Create a new Customer object
     final newCustomer = Customer(
-      newId, // Auto-incremented ID
+      newId,
       firstNameController.text.trim(),
       lastNameController.text.trim(),
       birthdayController.text.trim(),
