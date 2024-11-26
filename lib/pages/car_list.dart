@@ -186,7 +186,7 @@ class CarListPageState extends State<CarListPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color(navColour), // BottomNav background color
-        selectedItemColor: Color(accentColour), // Highlighted item color
+        selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white,
         currentIndex: currentIndex,
         onTap: handleNavigation,
@@ -312,7 +312,6 @@ class CarListPageState extends State<CarListPage> {
   }
 
   Widget buildDetailCard(String title, String value) {
-    String fuelTypeSuffix = selectedCar!.fuelType.toString();
 
     return Container(
       padding: const EdgeInsets.all(12.0), // Reduced padding for a compact layout

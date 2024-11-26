@@ -189,7 +189,7 @@ class AddCarPageState extends State<AddCarPage> {
     final isEditing = widget.carToEdit != null;
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit Car' : 'Add Car'),
+        title: Text(isEditing ? 'Edit Car' : 'Add Car', style: const TextStyle(color: Colors.white)),
         backgroundColor: Color(navColour),
         iconTheme: const IconThemeData(color: Color(0xFFFCA311)),
       ),
@@ -223,6 +223,13 @@ class AddCarPageState extends State<AddCarPage> {
                       controller: numOfPassengersController,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(labelText: '# of Passengers', border: OutlineInputBorder()),
+                      onChanged: (value) {
+                        // Ensure that only valid integer values are entered
+                        if (int.tryParse(value) == null && value.isNotEmpty) {
+                          // Reset value
+                          numOfPassengersController.text = '';
+                        }
+                      },
                     ),
                     const SizedBox(height: 10),
                     DropdownButtonFormField<String>(
@@ -240,9 +247,17 @@ class AddCarPageState extends State<AddCarPage> {
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: fuelSizeController,
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       decoration: const InputDecoration(labelText: 'Fuel Size (kWh / litres)', border: OutlineInputBorder()),
+                      onChanged: (value) {
+                        // Ensure that only valid decimal values are entered
+                        if (double.tryParse(value) == null && value.isNotEmpty) {
+                          // Reset value
+                          fuelSizeController.text = '';
+                        }
+                      },
                     ),
+
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: isEditing ? updateCar : addCar,
