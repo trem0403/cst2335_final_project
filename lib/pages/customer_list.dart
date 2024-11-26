@@ -19,6 +19,12 @@ class CustomerListPageState extends State<CustomerListPage> {
   List<Customer> customers = [];
   int currentIndex = 0; // Index for bottom navigation
 
+  //Colours
+  var navColour = 0xFF14213D;
+  var accentColour = 0xFFFCA311;
+  var backgroundColour = 0xFF000000;
+  var gridColour = 0xFFE5E5E5;
+
   @override
   void initState() {
     super.initState();
@@ -169,12 +175,19 @@ class CustomerListPageState extends State<CustomerListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Customer List'),
+        title: const Text('Customer List', style: TextStyle(color: Colors.white),),
+        iconTheme: const IconThemeData(
+          color: Color(0xFFFCA311), // Change the arrow color here
+        ),
+        backgroundColor: Color(navColour),
       ),
       body: Center(
         child: reactiveLayout(),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(navColour), // BottomNav background color
+        selectedItemColor: Color(accentColour), // Highlighted item color
+        unselectedItemColor: Colors.white,
         currentIndex: currentIndex,
         onTap: handleNavigation,
         items: const [
@@ -205,6 +218,11 @@ class CustomerListPageState extends State<CustomerListPage> {
       return Row(
         children: [
           Expanded(flex: 1, child: customerList()),
+          VerticalDivider(
+            color: Colors.grey.shade700, // Divider color
+            thickness: 1, // Divider thickness
+            width: 1,
+          ),
           Expanded(flex: 2, child: detailsPage()),
         ],
       );
@@ -220,11 +238,13 @@ class CustomerListPageState extends State<CustomerListPage> {
   }
 
   Widget detailsPage() {
+
+
     if (selectedCustomer == null) {
       return const Center(
         child: Text(
           "Please select a Customer from the list",
-          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.black),
           textAlign: TextAlign.center,
         ),
       );
@@ -248,9 +268,8 @@ class CustomerListPageState extends State<CustomerListPage> {
             children: [
               const Text(
                 "Customer Details",
-                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-              ),
-              const Divider(thickness: 1),
+                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Color(0xFF14213D)),              ),
+              const Divider(thickness: 1, color: Colors.grey),
               const SizedBox(height: 10),
               Expanded(
                 child: GridView.count(
@@ -277,8 +296,10 @@ class CustomerListPageState extends State<CustomerListPage> {
                       selectedCustomer = null; // Clear the selection
                     });
                   },
-                  child:
-                  const Text("Back to List"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(navColour),
+                  ),
+                  child: const Text("Back to List", style: TextStyle(color: Colors.white),),
                 ),
               ),
             ],
@@ -293,7 +314,7 @@ class CustomerListPageState extends State<CustomerListPage> {
     return Container(
       padding: const EdgeInsets.all(12.0), // Reduced padding for a compact layout
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: Color(gridColour), // Light gray background
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(
@@ -322,10 +343,6 @@ class CustomerListPageState extends State<CustomerListPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 20),
-          const Text(
-            "Customers:",
-            style: TextStyle(fontSize: 15),
-          ),
           Flexible(
             child: customers.isEmpty
                 ? const Center(
@@ -349,7 +366,7 @@ class CustomerListPageState extends State<CustomerListPage> {
                     });
                   },
                   title: Text(
-                    "Customer: ${customer.firstName} ${customer.lastName}",
+                    "${customer.firstName} ${customer.lastName}",
                     style: const TextStyle(fontSize: 16.0),
                   ),
                   subtitle: Text(

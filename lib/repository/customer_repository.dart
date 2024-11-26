@@ -9,10 +9,10 @@ class CustomerRepository {
   static final EncryptedSharedPreferences prefs = EncryptedSharedPreferences();
 
   static Future<void> loadData() async {
-    firstName = await prefs.getString('firstName') ?? "";
-    lastName = await prefs.getString('lastName') ?? "";
-    address = await prefs.getString('address') ?? "";
-    birthday = await prefs.getString('birthday') ?? "";
+    firstName = await prefs.getString('firstName');
+    lastName = await prefs.getString('lastName');
+    address = await prefs.getString('address');
+    birthday = await prefs.getString('birthday');
   }
 
   static Future<void> saveData() async {

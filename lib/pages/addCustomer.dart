@@ -19,12 +19,17 @@ class AddCustomerPage extends StatefulWidget {
 class AddCustomerPageState extends State<AddCustomerPage> {
   late CustomerDao dao;
 
-
   // Text controllers for form fields
   late TextEditingController firstNameController;
   late TextEditingController lastNameController;
   late TextEditingController addressController;
   late TextEditingController birthdayController;
+
+  //Colours
+  var navColour = 0xFF14213D;
+  var accentColour = 0xFFFCA311;
+  var forGroundColour = 0xFF000000;
+  var gridColour = 0xFFE5E5E5;
 
   @override
   void initState() {
@@ -166,10 +171,15 @@ class AddCustomerPageState extends State<AddCustomerPage> {
     final isEditing = widget.customerToEdit != null;
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit Customer' : 'Add Customer'),
+        title: Text(isEditing ? 'Edit Customer' : 'Add Customer', style: const TextStyle(color: Colors.white),),
+        iconTheme: const IconThemeData(
+          color: Color(0xFFFCA311), // Change the arrow color here
+        ),
+        backgroundColor: Color(navColour),
       ),
       body: Center(
         child: Card(
+          color: Color(gridColour),
           elevation: 5.0,
           margin: const EdgeInsets.all(16.0),
           child: Padding(
@@ -181,7 +191,8 @@ class AddCustomerPageState extends State<AddCustomerPage> {
                   children: [
                     Text(
                       isEditing ? 'Edit Customer Details' : 'Customer Details',
-                      style: Theme.of(context).textTheme.titleLarge,
+
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
