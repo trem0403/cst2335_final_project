@@ -102,7 +102,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Car` (`id` INTEGER NOT NULL, `brand` TEXT NOT NULL, `model` TEXT NOT NULL, `numberOfPassengers` INTEGER NOT NULL, `fuelType` INTEGER NOT NULL, `fuelSize` REAL NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `Car` (`id` INTEGER NOT NULL, `brand` TEXT NOT NULL, `model` TEXT NOT NULL, `numberOfPassengers` INTEGER NOT NULL, `fuelType` TEXT NOT NULL, `fuelSize` REAL NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `CarDealership` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `streetAddress` TEXT NOT NULL, `city` TEXT NOT NULL, `zip` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
@@ -151,7 +151,7 @@ class _$CarDao extends CarDao {
                   'brand': item.brand,
                   'model': item.model,
                   'numberOfPassengers': item.numberOfPassengers,
-                  'fuelType': item.fuelType.index,
+                  'fuelType': item.fuelType,
                   'fuelSize': item.fuelSize
                 }),
         _carUpdateAdapter = UpdateAdapter(
@@ -163,7 +163,7 @@ class _$CarDao extends CarDao {
                   'brand': item.brand,
                   'model': item.model,
                   'numberOfPassengers': item.numberOfPassengers,
-                  'fuelType': item.fuelType.index,
+                  'fuelType': item.fuelType,
                   'fuelSize': item.fuelSize
                 }),
         _carDeletionAdapter = DeletionAdapter(
@@ -175,7 +175,7 @@ class _$CarDao extends CarDao {
                   'brand': item.brand,
                   'model': item.model,
                   'numberOfPassengers': item.numberOfPassengers,
-                  'fuelType': item.fuelType.index,
+                  'fuelType': item.fuelType,
                   'fuelSize': item.fuelSize
                 });
 
@@ -199,7 +199,7 @@ class _$CarDao extends CarDao {
             row['brand'] as String,
             row['model'] as String,
             row['numberOfPassengers'] as int,
-            FuelType.values[row['fuelType'] as int],
+            row['fuelType'] as String,
             row['fuelSize'] as double));
   }
 
@@ -399,9 +399,8 @@ class _$CustomerDao extends CustomerDao {
   }
 
   @override
-  Future<int> updateCustomer(Customer customer) {
-    return _customerUpdateAdapter.updateAndReturnChangedRows(
-        customer, OnConflictStrategy.abort);
+  Future<void> updateCustomer(Customer customer) async {
+    await _customerUpdateAdapter.update(customer, OnConflictStrategy.abort);
   }
 
   @override

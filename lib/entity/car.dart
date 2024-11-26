@@ -11,7 +11,7 @@ class Car {
   final String brand;
   final String model;
   final int numberOfPassengers;
-  final FuelType fuelType;
+  final String fuelType;
   final double fuelSize;
 
   Car(this.id, this.brand, this.model, this.numberOfPassengers, this.fuelType, this.fuelSize)
@@ -21,6 +21,6 @@ class Car {
     }
   }
 }
-enum FuelType { gas, battery }
+
 
 
