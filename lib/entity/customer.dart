@@ -13,10 +13,7 @@ class Customer {
   final String address;
   final String birthday;
 
-
-
-
-  Customer(this.id, this.firstName, this.lastName, this.address, this.birthday)
+  Customer(this.id, this.firstName, this.lastName, this.birthday, this.address)
   {
     if(id >= ID) {
       ID = id + 1;
