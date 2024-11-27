@@ -184,7 +184,12 @@ class AddCarDealershipPageState extends State<AddCarDealershipPage> {
     final isEditing = widget.carDealershipToEdit != null;
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit CarDealership' : 'Add CarDealership', style: const TextStyle(color: Colors.white),),
+        title: Text(
+          isEditing ? 'Edit CarDealership' : 'Add CarDealership',
+          style: const TextStyle(
+              color: Colors.white
+          ),
+        ),
         iconTheme: const IconThemeData(
           color: Color(0xFFFCA311), // Change the arrow color here
         ),
@@ -192,7 +197,7 @@ class AddCarDealershipPageState extends State<AddCarDealershipPage> {
       ),
       body: Center(
         child: Card(
-          color: Color(gridColour),
+          color: Color(navColour),
           elevation: 5.0,
           margin: const EdgeInsets.all(16.0),
           child: Padding(
@@ -204,40 +209,51 @@ class AddCarDealershipPageState extends State<AddCarDealershipPage> {
                   children: [
                     Text(
                       isEditing ? 'Edit Car Dealership Details' : 'Car Dealership Details',
-
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
+                          color: Colors.white
+                      ),
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: nameController,
                       decoration: const InputDecoration(
                         labelText: 'Dealership Name',
+                        labelStyle: TextStyle(color: Colors.white70),
                         border: OutlineInputBorder(),
                       ),
+                      style: const TextStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: streetAddressController,
                       decoration: const InputDecoration(
                         labelText: 'Street Address',
+                        labelStyle: TextStyle(color: Colors.white70),
                         border: OutlineInputBorder(),
                       ),
+                      style: const TextStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: cityController,
                       decoration: const InputDecoration(
                         labelText: 'City',
+                        labelStyle: TextStyle(color: Colors.white70),
                         border: OutlineInputBorder(),
                       ),
+                      style: const TextStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: zipController,
                       decoration: const InputDecoration(
                         labelText: 'ZIP Code',
+                        labelStyle: TextStyle(color: Colors.white70),
                         border: OutlineInputBorder(),
                       ),
+                      style: const TextStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(

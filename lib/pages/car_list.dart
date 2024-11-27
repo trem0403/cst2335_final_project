@@ -316,7 +316,7 @@ class CarListPageState extends State<CarListPage> {
     return Container(
       padding: const EdgeInsets.all(12.0), // Reduced padding for a compact layout
       decoration: BoxDecoration(
-        color: Color(gridColour), // Light gray background
+        color: Color(accentColour),
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(

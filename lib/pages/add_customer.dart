@@ -184,7 +184,12 @@ class AddCustomerPageState extends State<AddCustomerPage> {
     final isEditing = widget.customerToEdit != null;
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit Customer' : 'Add Customer', style: const TextStyle(color: Colors.white),),
+        title: Text(
+          isEditing ? 'Edit Customer' : 'Add Customer',
+          style: const TextStyle(
+              color: Colors.white
+          ),
+        ),
         iconTheme: const IconThemeData(
           color: Color(0xFFFCA311), // Change the arrow color here
         ),
@@ -192,7 +197,7 @@ class AddCustomerPageState extends State<AddCustomerPage> {
       ),
       body: Center(
         child: Card(
-          color: Color(gridColour),
+          color: Color(navColour),
           elevation: 5.0,
           margin: const EdgeInsets.all(16.0),
           child: Padding(
@@ -204,45 +209,59 @@ class AddCustomerPageState extends State<AddCustomerPage> {
                   children: [
                     Text(
                       isEditing ? 'Edit Customer Details' : 'Customer Details',
-
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                        color: Colors.white, // Text color set to white
+                      ),
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: firstNameController,
                       decoration: const InputDecoration(
                         labelText: 'First Name',
+                        labelStyle: TextStyle(color: Colors.white70), // Set label color to white
                         border: OutlineInputBorder(),
                       ),
+                      style: const TextStyle(color: Colors.white), // Set text color to white
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: lastNameController,
                       decoration: const InputDecoration(
                         labelText: 'Last Name',
+                        labelStyle: TextStyle(color: Colors.white70), // Set label color to white
                         border: OutlineInputBorder(),
                       ),
+                      style: const TextStyle(color: Colors.white), // Set text color to white
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: addressController,
                       decoration: const InputDecoration(
                         labelText: 'Address',
+                        labelStyle: TextStyle(color: Colors.white70), // Set label color to white
                         border: OutlineInputBorder(),
                       ),
+                      style: const TextStyle(color: Colors.white), // Set text color to white
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: birthdayController,
                       decoration: const InputDecoration(
                         labelText: 'Birthday (YYYY-MM-DD)',
+                        labelStyle: TextStyle(color: Colors.white70), // Set label color to white
                         border: OutlineInputBorder(),
                       ),
+                      style: const TextStyle(color: Colors.white), // Set text color to white
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: isEditing ? updateCustomer : addCustomer,
-                      child: Text(isEditing ? 'Save Changes' : 'Add Customer'),
+                      child: Text(
+                        isEditing ? 'Save Changes' : 'Add Customer',
+                        style: const TextStyle(color: Colors.black), // Set button text color to white
+                      ),
                     ),
                   ],
                 ),
@@ -253,5 +272,6 @@ class AddCustomerPageState extends State<AddCustomerPage> {
       ),
     );
   }
+
 
 }

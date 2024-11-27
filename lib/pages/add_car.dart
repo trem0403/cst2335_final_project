@@ -185,13 +185,18 @@ class AddCarPageState extends State<AddCarPage> {
     final isEditing = widget.carToEdit != null;
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit Car' : 'Add Car', style: const TextStyle(color: Colors.white)),
+        title: Text(
+            isEditing ? 'Edit Car' : 'Add Car',
+            style: const TextStyle(
+                color: Colors.white
+            ),
+        ),
         backgroundColor: Color(navColour),
         iconTheme: const IconThemeData(color: Color(0xFFFCA311)),
       ),
       body: Center(
         child: Card(
-          color: Color(gridColour),
+          color: Color(navColour),
           elevation: 5.0,
           margin: const EdgeInsets.all(16.0),
           child: Padding(
@@ -202,23 +207,42 @@ class AddCarPageState extends State<AddCarPage> {
                   children: [
                     Text(
                       isEditing ? 'Edit Car Details' : 'Car Details',
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                        color: Colors.white,
+                      ),
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: brandController,
-                      decoration: const InputDecoration(labelText: 'Brand Name', border: OutlineInputBorder()),
+                      decoration: const InputDecoration(
+                        labelText: 'Brand Name',
+                        labelStyle: TextStyle(color: Colors.white70),
+                        border: OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: modelController,
-                      decoration: const InputDecoration(labelText: 'Model', border: OutlineInputBorder()),
+                      decoration: const InputDecoration(
+                        labelText: 'Model',
+                        labelStyle: TextStyle(color: Colors.white70),
+                        border: OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: numOfPassengersController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: '# of Passengers', border: OutlineInputBorder()),
+                      decoration: const InputDecoration(
+                        labelText: '# of Passengers',
+                        labelStyle: TextStyle(color: Colors.white70),
+                        border: OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(color: Colors.white),
                       onChanged: (value) {
                         // Ensure that only valid integer values are entered
                         if (int.tryParse(value) == null && value.isNotEmpty) {
@@ -236,15 +260,25 @@ class AddCarPageState extends State<AddCarPage> {
                         });
                       },
                       items: fuelTypes.map((type) {
-                        return DropdownMenuItem(value: type, child: Text(type));
+                        return DropdownMenuItem(value: type, child: Text(type, style: const TextStyle(color: Colors.white)));
                       }).toList(),
-                      decoration: const InputDecoration(labelText: 'Fuel Type', border: OutlineInputBorder()),
+                      decoration: const InputDecoration(
+                        labelText: 'Fuel Type',
+                        labelStyle: TextStyle(color: Colors.white),
+                        border: OutlineInputBorder(),
+                      ),
+                      dropdownColor: Color(navColour), // This changes the background color of the dropdown menu
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: fuelSizeController,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(labelText: 'Fuel Size (kWh / litres)', border: OutlineInputBorder()),
+                      decoration: const InputDecoration(
+                        labelText: 'Fuel Size (kWh / litres)',
+                        labelStyle: TextStyle(color: Colors.white70),
+                        border: OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(color: Colors.white),
                       onChanged: (value) {
                         // Ensure that only valid decimal values are entered
                         if (double.tryParse(value) == null && value.isNotEmpty) {
@@ -253,11 +287,13 @@ class AddCarPageState extends State<AddCarPage> {
                         }
                       },
                     ),
-
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: isEditing ? updateCar : addCar,
-                      child: Text(isEditing ? 'Save Changes' : 'Add Car'),
+                      child: Text(
+                        isEditing ? 'Save Changes' : 'Add Car',
+                        style: const TextStyle(color: Colors.black),
+                      ),
                     ),
                   ],
                 ),
@@ -268,4 +304,5 @@ class AddCarPageState extends State<AddCarPage> {
       ),
     );
   }
+
 }

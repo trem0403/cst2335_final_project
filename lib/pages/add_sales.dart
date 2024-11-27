@@ -187,15 +187,20 @@ class AddSalesPageState extends State<AddSalesPage> {
     final isEditing = widget.salesToEdit != null;
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit Sales' : 'Add Sales', style: const TextStyle(color: Colors.white),),
+        title: Text(
+          isEditing ? 'Edit Sale' : 'Add Sale',
+          style: const TextStyle(
+              color: Colors.white
+          ),
+        ),
         iconTheme: const IconThemeData(
-          color: Color(0xFFFCA311), // Change the arrow color here
+          color: Color(0xFFFCA311),
         ),
         backgroundColor: Color(navColour),
       ),
       body: Center(
         child: Card(
-          color: Color(gridColour),
+          color: Color(navColour),
           elevation: 5.0,
           margin: const EdgeInsets.all(16.0),
           child: Padding(
@@ -206,15 +211,23 @@ class AddSalesPageState extends State<AddSalesPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      isEditing ? 'Edit Sales Details' : 'Sales Details',
-
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                      isEditing ? 'Edit Sale Details' : 'Sale Details',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
+                          color: Colors.white
+                      ),
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: customerIDController,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(labelText: 'Customer ID', border: OutlineInputBorder(),),
+                      decoration: const InputDecoration(
+                        labelText: 'Customer ID',
+                        labelStyle: TextStyle(color: Colors.white70),
+                        border: OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(color: Colors.white),
                       onChanged: (value) {
                         // Ensure that only valid integer values are entered
                         if (int.tryParse(value) == null && value.isNotEmpty) {
@@ -227,7 +240,12 @@ class AddSalesPageState extends State<AddSalesPage> {
                     TextFormField(
                       controller: carIDController,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(labelText: 'Car ID', border: OutlineInputBorder(),),
+                      decoration: const InputDecoration(
+                        labelText: 'Car ID',
+                        labelStyle: TextStyle(color: Colors.white70),
+                        border: OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(color: Colors.white),
                       onChanged: (value) {
                         // Ensure that only valid integer values are entered
                         if (int.tryParse(value) == null && value.isNotEmpty) {
@@ -240,7 +258,12 @@ class AddSalesPageState extends State<AddSalesPage> {
                     TextFormField(
                       controller: carDealershipIDController,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(labelText: 'Car Dealership ID', border: OutlineInputBorder(),),
+                      decoration: const InputDecoration(
+                        labelText: 'Car Dealership ID',
+                        labelStyle: TextStyle(color: Colors.white70),
+                        border: OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(color: Colors.white),
                       onChanged: (value) {
                         // Ensure that only valid integer values are entered
                         if (int.tryParse(value) == null && value.isNotEmpty) {
@@ -254,13 +277,15 @@ class AddSalesPageState extends State<AddSalesPage> {
                       controller: dateOfPurchaseController,
                       decoration: const InputDecoration(
                         labelText: 'Date of Purchase (YYYY-MM-DD)',
+                        labelStyle: TextStyle(color: Colors.white70),
                         border: OutlineInputBorder(),
                       ),
+                      style: const TextStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: isEditing ? updateSales : addSales,
-                      child: Text(isEditing ? 'Save Changes' : 'Add Sales'),
+                      child: Text(isEditing ? 'Save Changes' : 'Add Sale'),
                     ),
                   ],
                 ),
