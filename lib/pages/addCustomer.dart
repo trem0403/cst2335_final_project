@@ -118,21 +118,32 @@ class AddCustomerPageState extends State<AddCustomerPage> {
       return;
     }
 
+    // Validate the birthday format (YYYY-MM-DD)
+    final String birthday = birthdayController.text.trim();
+    final RegExp dateRegEx = RegExp(r'^\d{4}-\d{2}-\d{2}$');
+    if (!dateRegEx.hasMatch(birthday)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid date format. Use YYYY-MM-DD.')),
+      );
+      return;
+    }
+
     final int newId = Customer.ID; // Use static ID
     Customer.ID++; // Increment the static ID
+
     // Create a new Customer object
     final newCustomer = Customer(
       newId,
       firstNameController.text.trim(),
       lastNameController.text.trim(),
-      birthdayController.text.trim(),
+      birthday,
       addressController.text.trim(),
     );
 
     // Insert the customer into the database
     await dao.insertCustomer(newCustomer);
 
-    //Save customer data for next customer entry
+    // Save customer data for next customer entry
     saveDataForNextCustomer();
 
     // Go back to the previous page
@@ -140,6 +151,8 @@ class AddCustomerPageState extends State<AddCustomerPage> {
       const SnackBar(content: Text('Customer added successfully!')),
     );
     Navigator.pop(context, true); // Return 'true' to indicate a new customer was added
+
+    // Clear fields for next input
     firstNameController.clear();
     lastNameController.clear();
     addressController.clear();

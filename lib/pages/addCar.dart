@@ -134,24 +134,20 @@ class AddCarPageState extends State<AddCarPage> {
       return;
     }
 
+    // Parse controllers into integer and double
     final numberOfPassengers = int.tryParse(numOfPassengersController.text.trim());
     final fuelSize = double.tryParse(fuelSizeController.text.trim());
 
-    if (numberOfPassengers == null || fuelSize == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter valid numeric values for passengers and fuel size')),
-      );
-      return;
-    }
 
-    final int newId = Car.ID++; // Use and increment static ID
+
+    final int newId = Car.ID++; // Use and incre\ment static ID
     final newCar = Car(
       newId,
       brandController.text.trim(),
       modelController.text.trim(),
-      numberOfPassengers,
+      numberOfPassengers!,
       selectedFuelType.trim(),
-      fuelSize,
+      fuelSize!,
     );
 
     try {

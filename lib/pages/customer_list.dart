@@ -186,7 +186,7 @@ class CustomerListPageState extends State<CustomerListPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color(navColour), // BottomNav background color
-        selectedItemColor: Color(accentColour), // Highlighted item color
+        selectedItemColor: Colors.white, // Highlighted item color
         unselectedItemColor: Colors.white,
         currentIndex: currentIndex,
         onTap: handleNavigation,
