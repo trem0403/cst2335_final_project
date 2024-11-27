@@ -148,7 +148,7 @@ class AddSalesPageState extends State<AddSalesPage> {
     // Insert the sale into the database
     await dao.insertSales(newSales);
 
-    //Save customer data for next sale entry
+    //Save sale data for next sale entry
     saveDataForNextSales();
 
     // Go back to the previous page
@@ -164,10 +164,10 @@ class AddSalesPageState extends State<AddSalesPage> {
 
   void updateSales() async {
 
-    // Saves updates customer information into a new record
+    // Saves updates sale information into a new record
     addSales();
 
-    // Delete customer with outdated information
+    // Delete sale with outdated information
     await dao.deleteSalesById(widget.salesToEdit!.id);
   }
 

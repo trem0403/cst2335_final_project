@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:final_project/database/database.dart';
 import 'package:final_project/dao/customer_dao.dart';
 import 'package:final_project/entity/customer.dart';
-import 'package:final_project/pages/addCustomer.dart';
+import 'package:final_project/pages/add_customer.dart';
 
 class CustomerListPage extends StatefulWidget {
   final AppDatabase database;

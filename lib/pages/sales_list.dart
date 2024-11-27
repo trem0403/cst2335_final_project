@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:final_project/database/database.dart';
 import 'package:final_project/dao/sales_dao.dart';
 import 'package:final_project/entity/sales.dart';
-import 'package:final_project/pages/addSales.dart';
+import 'package:final_project/pages/add_sales.dart';
 
 class SalesListPage extends StatefulWidget {
   final AppDatabase database;

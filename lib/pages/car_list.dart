@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:final_project/database/database.dart';
 import 'package:final_project/dao/car_dao.dart';
 import 'package:final_project/entity/car.dart';
-import 'package:final_project/pages/addCar.dart';
+import 'package:final_project/pages/add_car.dart';
 
 class CarListPage extends StatefulWidget {
   final AppDatabase database;
@@ -82,7 +82,7 @@ class CarListPageState extends State<CarListPage> {
       ),
     );
 
-    // Reload the customer list if a new customer was added
+    // Reload the car list if a new car was added
     if (result == true) {
       loadCar();
     }
@@ -121,7 +121,7 @@ class CarListPageState extends State<CarListPage> {
       ),
     );
 
-    // Reload the customer list if a customer was updated
+    // Reload the car list if a car was updated
     if (result == true) {
       loadCar();
       setState(() {
