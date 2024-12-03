@@ -4,6 +4,7 @@ import 'package:final_project/dao/customer_dao.dart';
 import 'package:final_project/entity/customer.dart';
 import 'package:final_project/pages/add_customer.dart';
 
+/// Displays a list of customers and provides options to add, edit, or delete customers.
 class CustomerListPage extends StatefulWidget {
   final AppDatabase database;
 
@@ -15,11 +16,11 @@ class CustomerListPage extends StatefulWidget {
 
 class CustomerListPageState extends State<CustomerListPage> {
   late CustomerDao dao;
-  Customer? selectedCustomer;
-  List<Customer> customers = [];
+  Customer? selectedCustomer; // Tracks the currently selected customer
+  List<Customer> customers = []; // Stores the list of customers
   int currentIndex = 0; // Index for bottom navigation
 
-  //Colours
+  // Color scheme for the page
   var navColour = 0xFF14213D;
   var accentColour = 0xFFFCA311;
   var backgroundColour = 0xFF000000;
@@ -29,9 +30,10 @@ class CustomerListPageState extends State<CustomerListPage> {
   void initState() {
     super.initState();
     dao = widget.database.customerDao;
-    loadCustomers();
+    loadCustomers();  // Load the customer list from the database
   }
 
+  /// Loads all customers from the database using the DAO.
   void loadCustomers() async {
     var list = await dao.findAllCustomers();
     setState(() {
@@ -39,24 +41,26 @@ class CustomerListPageState extends State<CustomerListPage> {
     });
   }
 
+  /// Handles navigation actions based on the selected bottom navigation index.
   void handleNavigation(int index) {
     setState(() {
       currentIndex = index;
     });
 
     switch (index) {
-      case 0: // Insert
+      case 0: // Insert a new customer
         insertCustomer();
         break;
-      case 1: // Update
+      case 1: // Update the selected customer
         updateCustomer();
         break;
-      case 2: // Delete
+      case 2: // Delete the selected customer
         showDeleteDialog();
         break;
     }
   }
 
+  /// Navigates to the AddCustomerPage to add a new customer.
   void insertCustomer() async {
     final result = await Navigator.push(
       context,
@@ -67,7 +71,7 @@ class CustomerListPageState extends State<CustomerListPage> {
               customers: customers,
             ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(1.0, 0.0); // Slide from right to left
+          const begin = Offset(1.0, 0.0); // Slide transition from right to left
           const end = Offset.zero;
           const curve = Curves.easeInOut;
 
@@ -88,6 +92,7 @@ class CustomerListPageState extends State<CustomerListPage> {
     }
   }
 
+  /// Navigates to the AddCustomerPage to edit the selected customer.
   void updateCustomer() async {
     if (selectedCustomer == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -106,7 +111,7 @@ class CustomerListPageState extends State<CustomerListPage> {
               customerToEdit: selectedCustomer,
             ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(1.0, 0.0); // Slide from right to left
+          const begin = Offset(1.0, 0.0); // Slide transition from right to left
           const end = Offset.zero;
           const curve = Curves.easeInOut;
 
@@ -133,9 +138,8 @@ class CustomerListPageState extends State<CustomerListPage> {
     }
   }
 
-
+  /// Deletes the selected customer from the database.
   void deleteCustomer() async {
-
     await dao.deleteCustomer(selectedCustomer!);
     setState(() {
       selectedCustomer = null; // Clear selection
@@ -144,6 +148,7 @@ class CustomerListPageState extends State<CustomerListPage> {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Customer deleted successfully")));
   }
 
+  /// Shows a confirmation dialog before deleting a customer.
   void showDeleteDialog() {
     if (selectedCustomer == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No customer selected for deletion")));
@@ -208,6 +213,7 @@ class CustomerListPageState extends State<CustomerListPage> {
     );
   }
 
+  /// Adjusts the layout based on the device orientation.
   Widget reactiveLayout() {
     var size = MediaQuery.of(context).size;
     var height = size.height;
@@ -237,9 +243,8 @@ class CustomerListPageState extends State<CustomerListPage> {
     }
   }
 
+  /// Displays details of the selected customer or a placeholder if none is selected.
   Widget detailsPage() {
-
-
     if (selectedCustomer == null) {
       return const Center(
         child: Text(
@@ -310,6 +315,12 @@ class CustomerListPageState extends State<CustomerListPage> {
     );
   }
 
+
+  /// Builds a styled card widget to display a title and corresponding value.
+  ///
+  /// Parameters:
+  /// [title] A string representing the label or heading of the detail.
+  /// [value] A string representing the detail's value or content
   Widget buildDetailCard(String title, String value) {
     return Container(
       padding: const EdgeInsets.all(12.0), // Reduced padding for a compact layout
@@ -337,6 +348,7 @@ class CustomerListPageState extends State<CustomerListPage> {
     );
   }
 
+  /// Displays the list of customers.
   Widget customerList() {
     return Center(
       child: Column(
@@ -390,5 +402,4 @@ class CustomerListPageState extends State<CustomerListPage> {
       ),
     );
   }
-
 }

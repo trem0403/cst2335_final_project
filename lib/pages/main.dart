@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
+
+/// Importing list pages for each entity
 import 'package:final_project/pages/car_list.dart';
 import 'package:final_project/pages/car_dealership_list.dart';
 import 'package:final_project/pages/customer_list.dart';
 import 'package:final_project/pages/sales_list.dart';
+
+/// Importing database
 import 'package:final_project/database/database.dart';
 
+/// Entry point of the application. Initializes the database and starts the app.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
   runApp(MyApp(database: database));
 }
 
+/// The main application widget that sets up the theme and home page.
 class MyApp extends StatelessWidget {
+  /// Database instance passed to different pages.
   final AppDatabase database;
 
+  /// Constructor for the MyApp widget.
   const MyApp({super.key, required this.database});
 
   @override
@@ -33,10 +41,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Home page widget that displays a menu with navigation options.
 class MyHomePage extends StatefulWidget {
+  /// Database instance used for data operations.
   final AppDatabase database;
+
+  /// Title of the home page.
   final String title;
 
+  /// Constructor for the MyHomePage widget.
   const MyHomePage({super.key, required this.database, required this.title});
 
   @override
@@ -44,6 +57,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  /// List of menu items with titles, icons, and corresponding navigation pages.
   final List<Map<String, dynamic>> menuItems = [
     {
       'title': 'Customer List',
@@ -108,17 +122,22 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  /// Builds a card positioned at a given alignment with the specified menu item details.
+  ///
+  /// [context] is the BuildContext for the widget.
+  /// [item] contains the menu item's details like title, icon, and page.
+  /// [alignment] defines where the card should be positioned.
   Widget buildPositionedCard(
       BuildContext context, Map<String, dynamic> item, Alignment alignment) {
-    // Get the media query orientation
+    // Check the screen orientation.
     var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
 
-    // Adjust width and height based on orientation
+    // Calculate the card width and height based on the orientation.
     double cardWidth = isPortrait
-        ? MediaQuery.of(context).size.width * 0.45  // 45% of the screen width in portrait
+        ? MediaQuery.of(context).size.width * 0.45 // 45% of the screen width in portrait
         : MediaQuery.of(context).size.width * 0.48; // 48% of the screen width in landscape
     double cardHeight = isPortrait
-        ? MediaQuery.of(context).size.height * 0.43  // 43% of the screen height in portrait
+        ? MediaQuery.of(context).size.height * 0.43 // 43% of the screen height in portrait
         : MediaQuery.of(context).size.height * 0.35; // 35% of the screen height in landscape
 
     return Align(
@@ -130,6 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
           height: cardHeight,
           child: GestureDetector(
             onTap: () {
+              // Navigate to the selected page when the card is tapped.
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -138,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
             child: Card(
-              color: Color(0xFFFCA311),
+              color: const Color(0xFFFCA311),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
               ),

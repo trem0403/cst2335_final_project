@@ -4,19 +4,28 @@ import 'package:final_project/dao/customer_dao.dart';
 import 'package:final_project/entity/customer.dart';
 import 'package:final_project/repository/customer_repository.dart';
 
-
+/// A stateful widget that allows adding or editing a customer.
 class AddCustomerPage extends StatefulWidget {
+
+  /// The database instance used for accessing the Customer DAO.
   final AppDatabase database;
+
+  /// A list of existing customers for reference.
   final List<Customer> customers;
+
+  /// The customer to edit, if editing mode is active.
   final Customer? customerToEdit; // Nullable customer for editing
 
+  /// Creates an instance of [AddCustomerPage].
   const AddCustomerPage({super.key, required this.database, required this.customers, this.customerToEdit,});
 
   @override
   State<AddCustomerPage> createState() => AddCustomerPageState();
 }
-
+/// The state class for [AddCustomerPage] that manages the customer form and database interactions.
 class AddCustomerPageState extends State<AddCustomerPage> {
+
+  /// Data access object (DAO) for performing customer operations.
   late CustomerDao dao;
 
   // Text controllers for form fields
@@ -25,7 +34,7 @@ class AddCustomerPageState extends State<AddCustomerPage> {
   late TextEditingController addressController;
   late TextEditingController birthdayController;
 
-  //Colours
+  // Color scheme for the page
   var navColour = 0xFF14213D;
   var accentColour = 0xFFFCA311;
   var forGroundColour = 0xFF000000;
@@ -36,19 +45,19 @@ class AddCustomerPageState extends State<AddCustomerPage> {
     super.initState();
     dao = widget.database.customerDao;
 
+    // Initialize text controllers for the form fields.
     firstNameController = TextEditingController();
     lastNameController = TextEditingController();
     addressController = TextEditingController();
     birthdayController = TextEditingController();
 
-    // Prepopulate fields if editing
+    // Prepopulate fields if editing an existing customer.
     if (widget.customerToEdit != null) {
       firstNameController.text = widget.customerToEdit!.firstName;
       lastNameController.text = widget.customerToEdit!.lastName;
       addressController.text = widget.customerToEdit!.address;
       birthdayController.text = widget.customerToEdit!.birthday;
-
-      // Check if there are existing customers and show the dialog
+      // Show a dialog to copy data if previous customers exist.
     } else if (widget.customers.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         showCopyDataDialog();
@@ -56,8 +65,8 @@ class AddCustomerPageState extends State<AddCustomerPage> {
     }
   }
 
-
-  Future<void> showCopyDataDialog() async {
+  /// Displays a dialog asking whether to copy the last customer's data.
+  void showCopyDataDialog() async {
     final shouldCopyData = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -84,6 +93,7 @@ class AddCustomerPageState extends State<AddCustomerPage> {
     }
   }
 
+  /// Loads customer data from the last saved entry into the form fields.
   void loadDataFromLastCustomer() async {
     setState(() {
       firstNameController.text = CustomerRepository.firstName;
@@ -97,6 +107,7 @@ class AddCustomerPageState extends State<AddCustomerPage> {
     });
   }
 
+  /// Saves the current customer data to be used for the next entry.
   void saveDataForNextCustomer() async {
     CustomerRepository.firstName = firstNameController.text;
     CustomerRepository.lastName = lastNameController.text;
@@ -106,6 +117,7 @@ class AddCustomerPageState extends State<AddCustomerPage> {
     CustomerRepository.saveData();
   }
 
+  /// Adds a new customer to the database after validating the form.
   void addCustomer() async {
     // Validate that all fields are filled
     if (firstNameController.text.isEmpty ||
@@ -128,8 +140,8 @@ class AddCustomerPageState extends State<AddCustomerPage> {
       return;
     }
 
-    final int newId = Customer.ID; // Use static ID
-    Customer.ID++; // Increment the static ID
+    final int newId = Customer.ID; // Use static ID for new customer.
+    Customer.ID++; // Increment the static ID.
 
     // Create a new Customer object
     final newCustomer = Customer(
@@ -159,13 +171,10 @@ class AddCustomerPageState extends State<AddCustomerPage> {
     birthdayController.clear();
   }
 
+  /// Updates an existing customer by adding a new record and deleting the old one.
   void updateCustomer() async {
-
-    // Saves updates customer information into a new record
-    addCustomer();
-
-    // Delete customer with outdated information
-    await dao.deleteCustomerById(widget.customerToEdit!.id);
+    addCustomer(); // Save the updated customer as a new record.
+    await dao.deleteCustomerById(widget.customerToEdit!.id); // Remove the old record.
   }
 
 
@@ -181,7 +190,7 @@ class AddCustomerPageState extends State<AddCustomerPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isEditing = widget.customerToEdit != null;
+    final isEditing = widget.customerToEdit != null;  // Check if in editing mode.
     return Scaffold(
       appBar: AppBar(
         title: Text(
