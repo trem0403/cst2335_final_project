@@ -33,6 +33,7 @@ dependencies:
   flutter:
     sdk: flutter
   floor: ^1.4.0
+  dartdoc: ^8.1.0
 
 dev_dependencies:
   floor_generator: ^1.4.0
