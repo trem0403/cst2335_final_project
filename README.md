@@ -1,6 +1,6 @@
 # Final Project for Mobile Graphics course
 
-Repo to for final project.
+Repo for final project.
 
 ## Getting Started
 
