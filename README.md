@@ -1,6 +1,6 @@
-# final_project
+# Final Project for Mobile Graphics course
 
-A new Flutter project.
+Repo to for final project.
 
 ## Getting Started
 
